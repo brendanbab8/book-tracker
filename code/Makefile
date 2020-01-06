@@ -7,6 +7,7 @@ RUN = java
 
 CLASSES = \
 				Book.java \
+				Main.java \
 
 default: classes
 
