@@ -8,7 +8,9 @@ RUN = java
 CLASSES = \
 				Book.java \
 				Main.java \
-
+				Shelf.java \
+				Library.java \
+				
 default: classes
 
 classes: $(CLASSES:.java=.class)

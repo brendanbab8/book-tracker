@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
+  /** The library object where all books are stored. */
+  private static Library library = new Library();
+
   /**
    * checkPages checks for a valid page number. Pages must be positive (>=0).
    * 
@@ -68,6 +71,15 @@ public class Main {
     System.out.println("Enter the rating for the book, or zero if the book is unread. (Must be a whole number.)");
     rating = input.nextInt();
     rating = checkRating(rating, input);
+
+    try {
+      Shelf s = library.getShelf(genre);
+      s.addBook(new Book(title, author, pages, publisher, series, genre, rating));
+    } catch (Exception e) {
+      Shelf s = new Shelf(genre);
+      s.addBook(new Book(title, author, pages, publisher, series, genre, rating));
+      library.addShelf(s);
+    }
   }
 
   /**
@@ -77,15 +89,33 @@ public class Main {
    */
   public static void menu(Scanner input) {
     System.out.println("\nTo add a book to your library, press [A].");
+    System.out.println("To see your shelves, press [S]");
+    System.out.println("To see a specific shelf, press [G]");
     System.out.println("To exit the tracker, press [X]");
     String choice = input.nextLine();
     if (choice.equalsIgnoreCase("a")) {
       addBook(input);
       System.out.println("Book added successfully!");
+      input.nextLine();
       menu(input);
     } else if (choice.equalsIgnoreCase("x")) {
       input.close();
       System.out.print("Goodbye!\n");
+    } else if (choice.equalsIgnoreCase("s")) {
+      System.out.println(library.toString() + "\n");
+      menu(input);
+    } else if (choice.equalsIgnoreCase("g")) {
+      System.out.println("Enter the name of the shelf you want to view: ");
+      choice = input.nextLine();
+
+      try {
+        Shelf s = library.getShelf(choice);
+        System.out.println(s.toString() + "\n");
+      } catch (Exception e) {
+        System.out.println("Shelf not found. Please try again.");
+      }
+
+      menu(input);
     } else {
       System.out.println("This command is not recognized. Please try again.");
       menu(input);
