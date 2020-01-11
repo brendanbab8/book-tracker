@@ -70,4 +70,20 @@ public class Shelf implements Comparable<Shelf> {
   public void addBook(Book book) {
     this.shelf.add(book);
   }
+
+  /**
+   * findBook is the Book based on the title
+   * 
+   * @param book The book title to be searched for
+   * @return The book with the same title as the given argument
+   */
+  public Book findBook(String book) {
+    for (Book b : shelf) {
+      if (b.getTitle().equalsIgnoreCase(book)) {
+        return b;
+      }
+    }
+
+    return null;
+  }
 }

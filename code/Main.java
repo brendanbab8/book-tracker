@@ -19,7 +19,7 @@ public class Main {
    * @param pages
    * @return the number of pages.
    */
-  public static int checkPages(int pages, Scanner input) {
+  private static int checkPages(int pages, Scanner input) {
     if (pages > -1) {
       return pages;
     } else {
@@ -36,7 +36,7 @@ public class Main {
    * @param rating
    * @return the rating of the book.
    */
-  public static int checkRating(int rating, Scanner input) {
+  private static int checkRating(int rating, Scanner input) {
     if (rating > -1 && rating < 11) {
       return rating;
     } else {
@@ -51,7 +51,7 @@ public class Main {
    * 
    * @param input The input channel for user input.
    */
-  public static void addBook(Scanner input) {
+  private static void addBook(Scanner input) {
     String title, author, publisher, series, genre;
     int pages, rating;
 
@@ -83,14 +83,74 @@ public class Main {
   }
 
   /**
+   * printShelf is the printing of a given shelf.
+   * 
+   * @param input the input channel for user input
+   * @return The shelf printed
+   */
+  private static Shelf printShelf(Scanner input) {
+    System.out.println("Here is a list of shelves you have in your library.\n");
+    System.out.println(library.toString() + "\n");
+    System.out.println("Enter the name of the shelf you want to view: ");
+    String choice = input.nextLine();
+
+    try {
+      Shelf s = library.getShelf(choice);
+      System.out.println(s.toString() + "\n");
+      return s;
+    } catch (Exception e) {
+      System.out.println("Shelf not found. Please try again.");
+      printShelf(input);
+    }
+    return null;
+  }
+
+  /**
+   * fixBook handles user corrections for an incorrect book.
+   * 
+   * @param input The input channel for user input
+   * @param shelf The shelf in which the book is contained.
+   * @return The requested book.
+   */
+  private static Book fixBook(Scanner input, Shelf shelf) {
+    System.out.println("That book wasn't found.  Please reenter the title.");
+    String choice = input.nextLine();
+    Book book = shelf.findBook(choice);
+    if (book == null) {
+      book = fixBook(input, shelf);
+    }
+    return book;
+  }
+
+  /**
+   * markRead is the marking of a book to be read.
+   * 
+   * @param input
+   */
+  private static void markRead(Scanner input) {
+    System.out.println("The shelf of your choice will be displayed for your convenience.");
+    Shelf s = printShelf(input);
+    System.out.println("\nWhich book would you like to mark read/ change the rating? Please enter the full title: ");
+    String choice = input.nextLine();
+    Book book = s.findBook(choice);
+    if (book == null) {
+      book = fixBook(input, s);
+    }
+    System.out.println("Please enter the new rating.");
+    int rating = input.nextInt();
+    rating = checkRating(rating, input);
+  }
+
+  /**
    * menu is the main menu for the application.
    * 
    * @param input The input channel for user input
    */
-  public static void menu(Scanner input) {
+  private static void menu(Scanner input) {
     System.out.println("\nTo add a book to your library, press [A].");
     System.out.println("To see your shelves, press [S]");
     System.out.println("To see a specific shelf, press [G]");
+    System.out.println("To mark a book read/ change the rating, press [R]");
     System.out.println("To exit the tracker, press [X]");
     String choice = input.nextLine();
     if (choice.equalsIgnoreCase("a")) {
@@ -105,16 +165,12 @@ public class Main {
       System.out.println(library.toString() + "\n");
       menu(input);
     } else if (choice.equalsIgnoreCase("g")) {
-      System.out.println("Enter the name of the shelf you want to view: ");
-      choice = input.nextLine();
-
-      try {
-        Shelf s = library.getShelf(choice);
-        System.out.println(s.toString() + "\n");
-      } catch (Exception e) {
-        System.out.println("Shelf not found. Please try again.");
-      }
-
+      printShelf(input);
+      menu(input);
+    } else if (choice.equalsIgnoreCase("r")) {
+      markRead(input);
+      System.out.println("Rating successfully changed!");
+      input.nextLine();
       menu(input);
     } else {
       System.out.println("This command is not recognized. Please try again.");

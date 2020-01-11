@@ -121,6 +121,15 @@ public class Book implements Comparable<Book> {
    */
   @Override
   public String toString() {
-    return String.format("Title: %25s\n Author: %15s\n", title, author);
+    return String.format("Title: %-25s\nAuthor: %-15s\nRating: %-2d\n", title, author, rating);
+  }
+
+  /**
+   * setRating is the changing of the rating.
+   * 
+   * @param rating the new rating for this book.
+   */
+  public void setRating(int rating) {
+    this.rating = rating;
   }
 }
