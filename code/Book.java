@@ -132,4 +132,14 @@ public class Book implements Comparable<Book> {
   public void setRating(int rating) {
     this.rating = rating;
   }
+
+  /**
+   * textOutput is the String used in file writing
+   * 
+   * @return A formatted string containing this book's information
+   */
+  public String textOutput() {
+    return title + "," + author + "," + Integer.toString(pages) + "," + publisher + "," + series + ","
+        + Integer.toString(rating);
+  }
 }

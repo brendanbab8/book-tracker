@@ -3,6 +3,9 @@
  * Creates an instance of a library.
  */
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedWriter;
 
 public class Library {
   private ArrayList<Shelf> shelves;
@@ -73,5 +76,22 @@ public class Library {
    */
   public void addShelf(Shelf shelf) {
     shelves.add(shelf);
+  }
+
+  /**
+   * writeToFile converts this library to a text file stored in the project
+   * folder.
+   * 
+   * @throws IOException
+   */
+  public void writeToFile() throws IOException {
+    BufferedWriter outFile = new BufferedWriter(new FileWriter("library.txt"));
+    for (Shelf s : shelves) {
+      outFile.write("Genre: " + s.getName() + "\n");
+      for (Book b : s.getShelf()) {
+        outFile.write(b.textOutput() + "\n");
+      }
+    }
+    outFile.close();
   }
 }

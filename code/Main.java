@@ -8,6 +8,7 @@
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.io.File;
 
 public class Main {
   /** The library object where all books are stored. */
@@ -145,8 +146,9 @@ public class Main {
    * menu is the main menu for the application.
    * 
    * @param input The input channel for user input
+   * @throws IOException
    */
-  private static void menu(Scanner input) {
+  private static void menu(Scanner input) throws IOException {
     System.out.println("\nTo add a book to your library, press [A].");
     System.out.println("To see your shelves, press [S]");
     System.out.println("To see a specific shelf, press [G]");
@@ -160,6 +162,7 @@ public class Main {
       menu(input);
     } else if (choice.equalsIgnoreCase("x")) {
       input.close();
+      library.writeToFile();
       System.out.print("Goodbye!\n");
     } else if (choice.equalsIgnoreCase("s")) {
       System.out.println(library.toString() + "\n");
@@ -178,7 +181,55 @@ public class Main {
     }
   }
 
-  public static void main(String[] args) throws IOException {
+  /**
+   * addBook is the addition of a book to a shelf.
+   * 
+   * @param book  the list of parameters of which a book is to be created.
+   * @param shelf the shelf to which the book is to be added to.
+   */
+  private static void addBook(String[] book, Shelf s) {
+    String title = book[0];
+    String author = book[1];
+    int pages = Integer.parseInt(book[2]);
+    String publisher = book[3];
+    String series = book[4];
+    int rating = Integer.parseInt(book[5]);
+
+    s.addBook(new Book(title, author, pages, publisher, series, s.getName(), rating));
+  }
+
+  /**
+   * loadFile parses the previously created library file.
+   * 
+   * @throws Exception
+   */
+  private static void loadFile(File file) throws Exception {
+    Scanner inFile = new Scanner(file);
+    String currGenre = "";
+    while (inFile.hasNextLine()) {
+      String line = inFile.nextLine();
+      String[] pieces = line.split(" ");
+      if (pieces[0].equals("Genre:")) {
+        currGenre = "";
+        String[] shelfName = line.split(" ");
+        for (int i = 1; i < shelfName.length; i++) {
+          currGenre += shelfName[i] + " ";
+        }
+        library.addShelf(new Shelf(currGenre.trim()));
+      } else {
+        Shelf s = library.getShelf(currGenre.trim());
+        String[] book = line.split(",");
+        addBook(book, s);
+      }
+    }
+    inFile.close();
+  }
+
+  public static void main(String[] args) throws Exception {
+    File newFile = new File("library.txt");
+    if (!newFile.createNewFile()) {
+      loadFile(newFile);
+    }
     System.out.println("Welcome to the book-tracker!");
     menu(new Scanner(System.in));
   }
