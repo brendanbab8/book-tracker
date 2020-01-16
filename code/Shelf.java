@@ -1,6 +1,9 @@
 
 /**
  * Creates an instance of a library.
+ * 
+ * @author brendanbab8
+ * @version 1.0
  */
 import java.util.ArrayList;
 

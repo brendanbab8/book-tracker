@@ -1,6 +1,9 @@
 
 /**
  * Creates an instance of a library.
+ * 
+ * @author brendanbab8
+ * @version 1.0
  */
 import java.util.ArrayList;
 import java.io.FileWriter;
@@ -93,5 +96,57 @@ public class Library {
       }
     }
     outFile.close();
+  }
+
+  /**
+   * booksRead counts the number of books that have been rated. A rating of zero
+   * means that the book is unread, and thus will not be counted.
+   * 
+   * @return The number of books read
+   */
+  public int booksRead() {
+    int total = 0;
+
+    for (Shelf s : shelves) {
+      for (Book b : s.getShelf()) {
+        if (b.getRating() > 0) {
+          total++;
+        }
+      }
+    }
+
+    return total;
+  }
+
+  /**
+   * totalBooks counts the number of books in the library.
+   * 
+   * @return The number of books in the library.
+   */
+  public int totalBooks() {
+    int total = 0;
+    for (Shelf s : shelves) {
+      total += s.getShelf().size();
+    }
+    return total;
+  }
+
+  /**
+   * totalPages counts the number of pages read.
+   * 
+   * @return The number of pages read in the library.
+   */
+  public int totalPages() {
+    int total = 0;
+
+    for (Shelf s : shelves) {
+      for (Book b : s.getShelf()) {
+        if (b.getRating() > 0) {
+          total += b.getPages();
+        }
+      }
+    }
+
+    return total;
   }
 }

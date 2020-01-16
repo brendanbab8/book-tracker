@@ -140,6 +140,7 @@ public class Main {
     System.out.println("Please enter the new rating.");
     int rating = input.nextInt();
     rating = checkRating(rating, input);
+    book.setRating(rating);
   }
 
   /**
@@ -153,6 +154,9 @@ public class Main {
     System.out.println("To see your shelves, press [S]");
     System.out.println("To see a specific shelf, press [G]");
     System.out.println("To mark a book read/ change the rating, press [R]");
+    System.out.println("To see the number of books in the library, press [T]");
+    System.out.println("To see the number of books read, press [F]");
+    System.out.println("To see the number of pages read, press [P]");
     System.out.println("To exit the tracker, press [X]");
     String choice = input.nextLine();
     if (choice.equalsIgnoreCase("a")) {
@@ -174,6 +178,15 @@ public class Main {
       markRead(input);
       System.out.println("Rating successfully changed!");
       input.nextLine();
+      menu(input);
+    } else if (choice.equalsIgnoreCase("t")) {
+      System.out.printf("Total: %-10d\n", library.totalBooks());
+      menu(input);
+    } else if (choice.equalsIgnoreCase("f")) {
+      System.out.printf("Total read: %10d/%-10d\n", library.booksRead(), library.totalBooks());
+      menu(input);
+    } else if (choice.equalsIgnoreCase("p")) {
+      System.out.printf("Total pages: %10d\n", library.totalPages());
       menu(input);
     } else {
       System.out.println("This command is not recognized. Please try again.");
