@@ -14,3 +14,4 @@ To run the program, first run [make classes]. Then, after the files have compile
 
 # Version History
 1.0- Initial Launch- Add books/ratings, view shelves, save library for future use
+1.1- Update to Visual for Unread books, Internal modification
