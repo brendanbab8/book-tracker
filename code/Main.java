@@ -3,7 +3,7 @@
  * Runs the book-tracker
  * 
  * @author brendanbab8
- * @version 1.0
+ * @version 1.1
  */
 
 import java.io.IOException;
@@ -144,21 +144,13 @@ public class Main {
   }
 
   /**
-   * menu is the main menu for the application.
+   * options allows menu items to be accessed by multiple methods.
    * 
-   * @param input The input channel for user input
+   * @param choice The user selected option.
+   * @param input  The input channel for user input.
    * @throws IOException
    */
-  private static void menu(Scanner input) throws IOException {
-    System.out.println("\nTo add a book to your library, press [A].");
-    System.out.println("To see your shelves, press [S]");
-    System.out.println("To see a specific shelf, press [G]");
-    System.out.println("To mark a book read/ change the rating, press [R]");
-    System.out.println("To see the number of books in the library, press [T]");
-    System.out.println("To see the number of books read, press [F]");
-    System.out.println("To see the number of pages read, press [P]");
-    System.out.println("To exit the tracker, press [X]");
-    String choice = input.nextLine();
+  private static void options(String choice, Scanner input) throws IOException {
     if (choice.equalsIgnoreCase("a")) {
       addBook(input);
       System.out.println("Book added successfully!");
@@ -192,6 +184,25 @@ public class Main {
       System.out.println("This command is not recognized. Please try again.");
       menu(input);
     }
+  }
+
+  /**
+   * menu is the main menu for the application.
+   * 
+   * @param input The input channel for user input
+   * @throws IOException
+   */
+  private static void menu(Scanner input) throws IOException {
+    System.out.println("\nTo add a book to your library, press [A].");
+    System.out.println("To see your shelves, press [S]");
+    System.out.println("To see a specific shelf, press [G]");
+    System.out.println("To mark a book read/ change the rating, press [R]");
+    System.out.println("To see the number of books in the library, press [T]");
+    System.out.println("To see the number of books read, press [F]");
+    System.out.println("To see the number of pages read, press [P]");
+    System.out.println("To exit the tracker, press [X]");
+    String choice = input.nextLine();
+    options(choice, input);
   }
 
   /**

@@ -121,7 +121,11 @@ public class Book implements Comparable<Book> {
    */
   @Override
   public String toString() {
-    return String.format("Title: %-25s\nAuthor: %-15s\nRating: %-2d\n", title, author, rating);
+    if (rating != 0) {
+      return String.format("Title: %-25s\nAuthor: %-15s\nRating: %-2d\n", title, author, rating);
+    } else {
+      return String.format("Title: %-25s\nAuthor: %-15s\nRating: Unread", title, author);
+    }
   }
 
   /**
