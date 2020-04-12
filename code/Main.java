@@ -126,7 +126,7 @@ public class Main {
   /**
    * markRead is the marking of a book to be read.
    * 
-   * @param input
+   * @param input The input channel for user input.
    */
   private static void markRead(Scanner input) {
     System.out.println("The shelf of your choice will be displayed for your convenience.");
@@ -141,6 +141,31 @@ public class Main {
     int rating = input.nextInt();
     rating = checkRating(rating, input);
     book.setRating(rating);
+  }
+
+  /**
+   * prints the entire library contents.
+   */
+  private static void viewLibrary() {
+    System.out.println(library.viewLibrary());
+  }
+
+  /**
+   * updates the book currently read.
+   * 
+   * @param input The input channel for user input.
+   */
+  private static void updateCurrent(Scanner input) {
+    System.out.println("Please enter the title of the book you are currently reading.");
+    System.out.println("Note: This book must be in your shelves before entering.");
+    String title = input.nextLine();
+    String oldTitle = library.getCurrent().getTitle();
+    library.setCurrent(title);
+    if (oldTitle.equalsIgnoreCase(library.getCurrent().getTitle())) {
+      System.out.println("Book not updated. Please try again!");
+    } else {
+      System.out.println("Book successfully updated!");
+    }
   }
 
   /**
@@ -180,6 +205,12 @@ public class Main {
     } else if (choice.equalsIgnoreCase("p")) {
       System.out.printf("Total pages: %10d\n", library.totalPages());
       menu(input);
+    } else if (choice.equalsIgnoreCase("v")) {
+      viewLibrary();
+      menu(input);
+    } else if (choice.equalsIgnoreCase("u")) {
+      updateCurrent(input);
+      menu(input);
     } else {
       System.out.println("This command is not recognized. Please try again.");
       menu(input);
@@ -194,9 +225,11 @@ public class Main {
    */
   private static void menu(Scanner input) throws IOException {
     System.out.println("\nTo add a book to your library, press [A].");
+    System.out.println("To view all library elements, press [V]");
     System.out.println("To see your shelves, press [S]");
     System.out.println("To see a specific shelf, press [G]");
     System.out.println("To mark a book read/ change the rating, press [R]");
+    System.out.println("To update your current read, press [U]");
     System.out.println("To see the number of books in the library, press [T]");
     System.out.println("To see the number of books read, press [F]");
     System.out.println("To see the number of pages read, press [P]");
@@ -227,7 +260,7 @@ public class Main {
    * 
    * @throws Exception
    */
-  private static void loadFile(File file) throws Exception {
+  private static void loadLibFile(File file) throws Exception {
     Scanner inFile = new Scanner(file);
     String currGenre = "";
     while (inFile.hasNextLine()) {
@@ -240,6 +273,9 @@ public class Main {
           currGenre += shelfName[i] + " ";
         }
         library.addShelf(new Shelf(currGenre.trim()));
+      } else if (pieces[0].equals("Current:")) {
+        String[] book = inFile.nextLine().split(",");
+        library.setCurrent(book[0]);
       } else {
         Shelf s = library.getShelf(currGenre.trim());
         String[] book = line.split(",");
@@ -252,7 +288,7 @@ public class Main {
   public static void main(String[] args) throws Exception {
     File newFile = new File("library.txt");
     if (!newFile.createNewFile()) {
-      loadFile(newFile);
+      loadLibFile(newFile);
     }
     System.out.println("Welcome to the book-tracker!");
     menu(new Scanner(System.in));

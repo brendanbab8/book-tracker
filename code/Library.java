@@ -3,7 +3,7 @@
  * Creates an instance of a library.
  * 
  * @author brendanbab8
- * @version 1.0
+ * @version 1.2
  */
 import java.util.ArrayList;
 import java.io.FileWriter;
@@ -12,9 +12,34 @@ import java.io.BufferedWriter;
 
 public class Library {
   private ArrayList<Shelf> shelves;
+  private Book currentRead;
 
   public Library() {
     this.shelves = new ArrayList<>();
+    this.currentRead = new Book("", "", 0, "", "", "", 0);
+  }
+
+  /**
+   * getCurrent is the book being currently read.
+   * 
+   * @return the book denoted as currently read.
+   */
+  public Book getCurrent() {
+    return this.currentRead;
+  }
+
+  /**
+   * setCurrent sets the book being currently read.
+   * 
+   * @param book The title of the book to be set
+   */
+  public void setCurrent(String book) {
+    for (Shelf s : shelves) {
+      Book b = s.findBook(book);
+      if (b != null) {
+        currentRead = b;
+      }
+    }
   }
 
   /**
@@ -27,7 +52,7 @@ public class Library {
   }
 
   /**
-   * toString is the string equivalent of the library
+   * toString is the string equivalent of the library shelves.
    * 
    * @return A formatted string of the shelves in the library.
    */
@@ -38,6 +63,24 @@ public class Library {
       shelfStr += s.getName() + "\n";
     }
     return shelfStr;
+  }
+
+  /**
+   * viewLibrary is the string equivalent of the entire library.
+   * 
+   * @return A formatted string of all library contents.
+   */
+  public String viewLibrary() {
+    String message = "Currently Reading:\n\n";
+    if (currentRead.getTitle().length() < 1) {
+      message += "None\n\n";
+    } else {
+      message += String.format("Title: %-25s\nAuthor: %-15s\n\n", currentRead.getTitle(), currentRead.getAuthor());
+    }
+
+    message += toString();
+
+    return message;
   }
 
   /**
@@ -95,6 +138,8 @@ public class Library {
         outFile.write(b.textOutput() + "\n");
       }
     }
+    outFile.write("Current: \n" + currentRead.textOutput());
+
     outFile.close();
   }
 

@@ -2,7 +2,7 @@
  * Creates an instance of a book.
  * 
  * @author brendanbab8
- * @version 1.0
+ * @version 1.1
  */
 public class Book implements Comparable<Book> {
   /** Various book characteristics. */
